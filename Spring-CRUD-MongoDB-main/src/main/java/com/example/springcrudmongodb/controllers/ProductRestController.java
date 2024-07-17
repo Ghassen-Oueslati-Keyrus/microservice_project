@@ -1,56 +1,49 @@
 package com.example.springcrudmongodb.controllers;
-
-import com.example.springcrudmongodb.entities.Product;
-import com.example.springcrudmongodb.services.IProductService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import com.example.springcrudmongodb.services.*;
+import com.example.springcrudmongodb.entities.Product;
 import java.util.List;
 import java.util.Map;
-
 @RestController
-@RequestMapping("/products")
-@RequiredArgsConstructor
-public class ProductRestController{
-
-    private final IProductService productService;
+@RequestMapping("/produits")
+public class ProductRestController {
+    @Autowired
+    private IProductService productService;
 
     @PostMapping
-    public Product add(@RequestBody Product product) {
-        return productService.add(product);
+    public ResponseEntity<Product> addProduct(@RequestBody Product product) {
+        Product createdProduct = productService.add(product);
+        return new ResponseEntity<>(createdProduct, HttpStatus.CREATED);
     }
 
-    @PatchMapping("{id}")
-    public Product patchUpdate(@RequestBody Map<Object,Object> fields, @PathVariable long id){
-        return productService.update(id,fields);
+    @GetMapping("/{id}")
+    public ResponseEntity<Product> getProductById(@PathVariable String id) {
+        return productService.getProductById(id)
+                .map(product -> new ResponseEntity<>(product, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @DeleteMapping("{id}")
-    public boolean delete( @PathVariable long id){
-        return productService.delete(id);
+    @PutMapping("/{id}")
+    public ResponseEntity<Product> updateProduct(@PathVariable String id, @RequestBody Map<Object, Object> fields) {
+        Product updatedProduct = productService.update(id, fields);
+        return updatedProduct != null ? new ResponseEntity<>(updatedProduct, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable String id) {
+        if (productService.delete(id)) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
 
     @GetMapping
-    public Page<Product> getProducts(int pageNbr,int pageSize){
-        return productService.getProducts(pageNbr,pageSize);
+    public ResponseEntity<List<Product>> getAllProducts() {
+        List<Product> products = productService.getAllProducts();
+        return new ResponseEntity<>(products, HttpStatus.OK);
     }
-
-    @GetMapping("{id}")
-    public Product getProduct(@PathVariable long id){
-        return productService.getProduct(id);
-    }
-
-    @GetMapping("name/{name}")
-    public Product getProduct(@PathVariable String name){
-        return productService.getProductByName(name);
-    }
-
-
-
-
-
-
-
 }
+

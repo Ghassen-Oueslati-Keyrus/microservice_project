@@ -1,0 +1,49 @@
+version: '3'
+services:
+  # config-server:
+  #   image: your-dockerhub-username/config-server:latest
+  #   ports:
+  #     - "8888:8888"
+  #   environment:
+  #     - GIT_URI=https://github.com/your-repo/configurations
+  # kong:
+  #   image: kong:latest
+  #   ports:
+  #     - "8000:8000"
+  #     - "8443:8443"
+  #     - "8001:8001"
+  #     - "8444:8444"
+  #   environment:
+  #     KONG_DATABASE: "off"
+  #     KONG_DECLARATIVE_CONFIG: "/kong/kong.yml"
+  #   volumes:
+  #     - ./kong/kong.yml:/kong/kong.yml
+  # article-service:
+  #   image: article-service:latest
+  #   ports:
+  #     - "8081:8081"
+  #   environment:
+  #     - DATABASE_URL=mysql://user:password@mysql/article_db
+  #     - SPRING_PROFILES_ACTIVE=prod
+  #     - SPRING_CLOUD_CONFIG_URI=http://config-server:8888
+  #   depends_on:
+  #     - config-server
+  #     - mysql
+  stock-service:
+    image: stock-service:latest
+    ports:
+      - "8082:8082"
+    environment:
+      - DATABASE_URL=mongodb://mongo:27017/stock_db
+      - SPRING_PROFILES_ACTIVE=prod
+      # - SPRING_CLOUD_CONFIG_URI=http://config-server:8888
+    depends_on:
+      # - config-server
+      - mongo
+  # mysql:
+  #   image: mysql:5.7
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: root
+  #     MYSQL_DATABASE: article_db
+  mongo:
+    image: mongo:latest
