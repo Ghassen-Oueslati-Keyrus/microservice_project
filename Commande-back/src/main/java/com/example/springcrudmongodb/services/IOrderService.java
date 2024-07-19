@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface IOrderService {
     Order createOrder(Order order);
+    List<Order> getAllOrders();
     Optional<Order> getOrderById(String id);
     void cancelOrder(String id);
-    List<Order> getAllOrders();
 }

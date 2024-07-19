@@ -1,12 +1,15 @@
 package com.example.springcrudmongodb.controllers;
+
+import com.example.springcrudmongodb.entities.Product;
+import com.example.springcrudmongodb.services.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.example.springcrudmongodb.services.*;
-import com.example.springcrudmongodb.entities.Product;
+
 import java.util.List;
 import java.util.Map;
+
 @RestController
 @RequestMapping("/produits")
 public class ProductRestController {
@@ -32,12 +35,11 @@ public class ProductRestController {
         return updatedProduct != null ? new ResponseEntity<>(updatedProduct, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable String id) {
-        if (productService.delete(id)) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        productService.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @GetMapping
@@ -46,4 +48,3 @@ public class ProductRestController {
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 }
-

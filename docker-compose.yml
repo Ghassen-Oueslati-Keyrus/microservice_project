@@ -13,7 +13,7 @@ services:
       - mongodb_data:/data/db
 
   spring-app:
-    image: microservice-product:latest
+    build: ./produit-back/
     container_name: spring-app
     depends_on:
       - mongodb

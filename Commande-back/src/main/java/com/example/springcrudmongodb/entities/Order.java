@@ -5,13 +5,43 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
-@Document
+@Document(collection = "orders")
 public class Order {
     @Id
     private String id;
-    private String userId; // Assuming you have a user ID
-    private List<String> productIds; // List of product IDs in the order
-    private double totalAmount;
+    private List<ProductQuantity> products; // List of products with their quantities
+    private double totalPrice;
 
-    // Getters and setters
+    // Constructors, Getters, and Setters
+    public Order() {
+    }
+
+    public Order(List<ProductQuantity> products, double totalPrice) {
+        this.products = products;
+        this.totalPrice = totalPrice;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public List<ProductQuantity> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<ProductQuantity> products) {
+        this.products = products;
+    }
+
+    public double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(double totalPrice) {
+        this.totalPrice = totalPrice;
+    }
 }

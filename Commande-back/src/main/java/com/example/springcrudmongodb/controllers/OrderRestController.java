@@ -8,10 +8,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/commandes")
+@RequestMapping("/orders")
 public class OrderRestController {
+
     @Autowired
     private IOrderService orderService;
 
@@ -23,20 +25,22 @@ public class OrderRestController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Order> getOrderById(@PathVariable String id) {
-        return orderService.getOrderById(id)
-                .map(order -> new ResponseEntity<>(order, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> cancelOrder(@PathVariable String id) {
-        orderService.cancelOrder(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        Optional<Order> order = orderService.getOrderById(id);
+        if (order == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(order, HttpStatus.OK);
     }
 
     @GetMapping
     public ResponseEntity<List<Order>> getAllOrders() {
         List<Order> orders = orderService.getAllOrders();
         return new ResponseEntity<>(orders, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteOrder(@PathVariable String id) {
+        orderService.cancelOrder(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
