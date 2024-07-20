@@ -4,12 +4,38 @@ const mongoose = require('mongoose');
 const { getProductById, updateProductQuantity } = require('./productServiceClient');
 const Order = require('./orderModel');
 require('./db'); // Import DB connection
+const { Eureka } = require('eureka-js-client');
 
 const app = express();
 const port = 9090;
 
 app.use(bodyParser.json());
+const client = new Eureka({
+    instance: {
+        app: 'order-service',
+        hostName: 'order-service',
+        ipAddr: '127.0.0.1',
+        statusPageUrl: `http://localhost:${port}`,
+        port: {
+            '$': port,
+            '@enabled': true,
+        },
+        vipAddress: 'order-service',
+        dataCenterInfo: {
+            '@class': 'com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo',
+            name: 'MyOwn',
+        },
+    },
+    eureka: {
+        host: 'eureka-server',
+        port: 8761,
+        servicePath: '/eureka/apps/',
+    },
+});
 
+client.start(error => {
+    console.log(error || 'Eureka client started successfully');
+});
 app.post('/orders', async (req, res) => {
     const { productIds } = req.body;
     
