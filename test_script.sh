@@ -13,35 +13,72 @@ PRODUCT_PRICE=49.99
 # Order details
 ORDER_QUANTITY=5
 
-echo "Creating a new product..."
-create_product_response=$(curl --silent --request POST "$KRACKEND_URL/produits/add" \
-  --header 'Content-Type: application/json' \
-  --data "{
-    \"name\": \"$PRODUCT_NAME\",
-    \"id\": \"$ID_PRODUCT\",
-    \"description\": \"$PRODUCT_DESCRIPTION\",
-    \"quantity\": $PRODUCT_QUANTITY,
-    \"price\": $PRODUCT_PRICE
-  }")
-product_id=$(echo $create_product_response | jq -r '.id')
-echo "Product created with ID: $product_id"
+# Function to create a product
+create_product() {
+  echo "Creating a new product..."
+  create_product_response=$(curl --silent --request POST "$KRACKEND_URL/produits/add" \
+    --header 'Content-Type: application/json' \
+    --data "{
+      \"name\": \"$PRODUCT_NAME\",
+      \"id\": \"$ID_PRODUCT\",
+      \"description\": \"$PRODUCT_DESCRIPTION\",
+      \"quantity\": $PRODUCT_QUANTITY,
+      \"price\": $PRODUCT_PRICE
+    }")
+  product_id=$(echo $create_product_response | jq -r '.id')
+  echo "Product created with ID: $product_id"
+}
 
-echo "Fetching all products..."
-curl --silent --location "$KRACKEND_URL/produits/getall"
+# Function to create an order
+create_order() {
+  echo "Creating an order for product ID $product_id with quantity $ORDER_QUANTITY..."
+  create_order_response=$(curl --silent --request POST "$KRACKEND_URL/orders/add" \
+    --header 'Content-Type: application/json' \
+    --data "{
+      \"productIds\": [\"$product_id\"]
+    }")
+  order_id=$(echo $create_order_response | jq -r '._id')
+  echo "Order created with ID: $order_id"
+}
 
-echo "Creating an order for product ID $product_id with quantity $ORDER_QUANTITY..."
-create_order_response=$(curl --silent --request POST "$KRACKEND_URL/orders/add" \
-  --header 'Content-Type: application/json' \
-  --data "{
-    \"productIds\": [\"$product_id\"]
-  }")
-order_id=$(echo $create_order_response | jq -r '._id')
-echo "Order created with ID: $order_id"
+# Function to cancel an order
+cancel_order() {
+  echo "Cancelling the last order with ID $order_id..."
+  curl --silent --request DELETE "$KRACKEND_URL/orders/$order_id"
+  echo "Order with ID $order_id has been canceled"
+}
 
-echo "Fetching all orders..."
-curl --silent --location "$KRACKEND_URL/orders/getall"
+# Function to fetch all products
+fetch_all_products() {
+  echo "Fetching all products..."
+  curl --silent --location "$KRACKEND_URL/produits/getall"
+}
 
-# echo "Cancelling the order with ID $order_id..."
-# curl --silent --request DELETE "$KRACKEND_URL/orders/$order_id"
+# Function to fetch all orders
+fetch_all_orders() {
+  echo "Fetching all orders..."
+  curl --silent --location "$KRACKEND_URL/orders/getall"
+}
 
-echo "Order cancelled successfully."
+# Main script execution
+create_product
+fetch_all_products
+
+create_order
+fetch_all_orders
+
+while true; do
+  read -p "Do you want to create another order for the same product? (yes/no): " create_another_order
+  if [ "$create_another_order" == "yes" ]; then
+    create_order
+    fetch_all_orders
+  else
+    break
+  fi
+done
+
+read -p "Do you want to cancel the last order? (yes/no): " cancel_last_order
+if [ "$cancel_last_order" == "yes" ]; then
+  cancel_order
+  fetch_all_orders
+fi

@@ -17,7 +17,7 @@ services:
     container_name: spring-app
     depends_on:
       - mongodb
-      - eureka-server
+      - discovery-server
     ports:
       - "8085:8080"
     environment:
@@ -27,7 +27,7 @@ services:
       spring.data.mongodb.authentication-database: admin
       spring.data.mongodb.host: mongodb
       spring.data.mongodb.database: productDB
-      eureka.client.serviceUrl.defaultZone: http://eureka-server:8761/eureka/
+      eureka.client.serviceUrl.defaultZone: http://discovery-server:8761/eureka/
   mongo-express:
     image: mongo-express:latest
     container_name: mongo-express
@@ -47,17 +47,16 @@ services:
     depends_on:
       - mongodb
       - spring-app
-      - eureka-server
+      - discovery-server
     ports:
       - "9090:9090"
     environment:
       MONGO_URI: mongodb://root:example@mongodb:27017/ordersDB?authSource=admin
       PRODUCT_SERVICE_URL: http://spring-app:8080/produits
-      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://discovery-server:8761/eureka/
 
-  eureka-server:
-    image: eurekaserver:latest
-    container_name: eureka-server
+  discovery-server:
+    container_name: discovery-server
     build:
       context: ./discovery-server/
       dockerfile: Dockerfile
