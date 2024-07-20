@@ -1,0 +1,57 @@
+{
+    "$schema": "http://www.krakend.io/schema/v2.json",
+    "version": 2,
+    "name": "KrakenD API Gateway",
+    "port": 8080,
+    "endpoints": [
+      {
+        "endpoint": "/orders",
+        "method": "GET",
+        "output_encoding": "json",
+        "backend": [
+          {
+            "host": ["http://node-app:8080"],
+            "url_pattern": "/orders",
+            "encoding": "json"
+          }
+        ]
+      },
+      {
+        "endpoint": "/orders/{id}",
+        "method": "GET",
+        "output_encoding": "json",
+        "backend": [
+          {
+            "host": ["http://node-app:8080"],
+            "url_pattern": "/orders/{id}",
+            "encoding": "json"
+          }
+        ]
+      },
+      {
+        "endpoint": "/orders",
+        "method": "POST",
+        "output_encoding": "json",
+        "backend": [
+          {
+            "host": ["http://node-app:8080"],
+            "url_pattern": "/orders",
+            "encoding": "json"
+          }
+        ]
+      },
+      {
+        "endpoint": "/orders/{id}",
+        "method": "DELETE",
+        "output_encoding": "json",
+        "backend": [
+          {
+            "host": ["http://node-app:8080"],
+            "url_pattern": "/orders/{id}",
+            "encoding": "json"
+          }
+        ]
+      }
+    ]
+  }
+  
