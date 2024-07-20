@@ -1,7 +1,7 @@
 // db.js
 const mongoose = require('mongoose');
 
-const uri = 'mongodb://localhost:27017/ordersDB'; // Replace 'your-database' with your actual database name
+const uri = 'mongodb://root:example@localhost:27017/ordersDB?authSource=admin';
 
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('Connected to MongoDB'))
