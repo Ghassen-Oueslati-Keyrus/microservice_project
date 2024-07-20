@@ -2,16 +2,16 @@
 const mongoose = require('mongoose');
 
 const orderSchema = new mongoose.Schema({
-    productNames: [String],
-    items: [
-        {
-            productId: String,
-            productName: String,
-            price: Number
-        }
-    ],
+    productOrders: [{ productId: String, quantity: Number }],
+    items: [{
+        productId: String,
+        productName: String,
+        quantity: Number,
+        price: Number,
+        totalPrice: Number
+    }],
     totalPrice: Number
-}, { timestamps: true });
+});
 
 const Order = mongoose.model('Order', orderSchema);
 

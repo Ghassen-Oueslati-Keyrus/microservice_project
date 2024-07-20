@@ -16,8 +16,8 @@ create_product() {
   create_product_response=$(curl --silent --request POST "$KRACKEND_URL/produits/add" \
     --header 'Content-Type: application/json' \
     --data "{
-      \"name\": \"$PRODUCT_NAME\",
       \"id\": \"$ID_PRODUCT\",
+      \"name\": \"$PRODUCT_NAME\",
       \"description\": \"$PRODUCT_DESCRIPTION\",
       \"quantity\": $PRODUCT_QUANTITY,
       \"price\": $PRODUCT_PRICE
@@ -30,12 +30,16 @@ create_product() {
 create_order() {
   echo "Enter the quantity for the order:"
   read ORDER_QUANTITY
-  echo "Creating an order for product ID $product_id with quantity $ORDER_QUANTITY..."
+  echo "Creating an order for product ID $ID_PRODUCT with quantity $ORDER_QUANTITY..."
   create_order_response=$(curl --silent --request POST "$KRACKEND_URL/orders/add" \
     --header 'Content-Type: application/json' \
     --data "{
-      \"productIds\": [\"$product_id\"],
-      \"quantity\": $ORDER_QUANTITY
+      \"productOrders\": [
+        {
+          \"productId\": \"$ID_PRODUCT\",
+          \"quantity\": $ORDER_QUANTITY
+        }
+      ]
     }")
   order_id=$(echo $create_order_response | jq -r '._id')
   echo "Order created with ID: $order_id"
