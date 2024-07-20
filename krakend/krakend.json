@@ -1,40 +1,40 @@
 {
     "$schema": "http://www.krakend.io/schema/v2.json",
-    "version": 2,
+    "version": 3,
     "name": "KrakenD API Gateway",
-    "port": 8080,
+    "port": 8000,
     "endpoints": [
       {
-        "endpoint": "/orders",
+        "endpoint": "/orders/getall",
         "method": "GET",
         "output_encoding": "json",
         "backend": [
           {
-            "host": ["http://node-app:8080"],
+            "host": ["http://node-app:9090"],
             "url_pattern": "/orders",
             "encoding": "json"
           }
         ]
       },
       {
-        "endpoint": "/orders/{id}",
+        "endpoint": "/orders/get/{id}",
         "method": "GET",
         "output_encoding": "json",
         "backend": [
           {
-            "host": ["http://node-app:8080"],
+            "host": ["http://node-app:9090"],
             "url_pattern": "/orders/{id}",
             "encoding": "json"
           }
         ]
       },
       {
-        "endpoint": "/orders",
+        "endpoint": "/orders/add",
         "method": "POST",
         "output_encoding": "json",
         "backend": [
           {
-            "host": ["http://node-app:8080"],
+            "host": ["http://node-app:9090"],
             "url_pattern": "/orders",
             "encoding": "json"
           }
@@ -46,12 +46,71 @@
         "output_encoding": "json",
         "backend": [
           {
-            "host": ["http://node-app:8080"],
+            "host": ["http://node-app:9090"],
             "url_pattern": "/orders/{id}",
             "encoding": "json"
+          }
+        ]
+      },
+      {
+        "endpoint": "/produits/getall",
+        "method": "GET",
+        "backend": [
+          {
+            "host": [
+              "http://spring-app:8080"
+            ],
+            "url_pattern": "/produits"
+          }
+        ]
+      },
+      {
+        "endpoint": "/produits/add",
+        "method": "POST",
+        "backend": [
+          {
+            "host": [
+              "http://spring-app:8080"
+            ],
+            "url_pattern": "/produits"
+          }
+        ]
+      },
+      {
+        "endpoint": "/produits/get/{id}",
+        "method": "GET",
+        "backend": [
+          {
+            "host": [
+              "http://spring-app:8080"
+            ],
+            "url_pattern": "/produits/{id}"
+          }
+        ]
+      },
+      {
+        "endpoint": "/produits/update/{id}",
+        "method": "PUT",
+        "backend": [
+          {
+            "host": [
+              "http://spring-app:8080"
+            ],
+            "url_pattern": "/produits/{id}"
+          }
+        ]
+      },
+      {
+        "endpoint": "/produits/{id}",
+        "method": "DELETE",
+        "backend": [
+          {
+            "host": [
+              "http://spring-app:8080"
+            ],
+            "url_pattern": "/produits/{id}"
           }
         ]
       }
     ]
   }
-  

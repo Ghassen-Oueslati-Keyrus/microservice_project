@@ -41,7 +41,7 @@ services:
       ME_CONFIG_MONGODB_ENABLE_ADMIN: "true"
 
   order-service:
-    build: ./order-service/
+    build: ./commande-node/
     container_name: order-service
     depends_on:
       - mongodb
