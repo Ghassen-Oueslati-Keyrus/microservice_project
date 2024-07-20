@@ -10,9 +10,6 @@ PRODUCT_DESCRIPTION="Sample Description"
 PRODUCT_QUANTITY=10
 PRODUCT_PRICE=49.99
 
-# Order details
-ORDER_QUANTITY=5
-
 # Function to create a product
 create_product() {
   echo "Creating a new product..."
@@ -31,11 +28,14 @@ create_product() {
 
 # Function to create an order
 create_order() {
+  echo "Enter the quantity for the order:"
+  read ORDER_QUANTITY
   echo "Creating an order for product ID $product_id with quantity $ORDER_QUANTITY..."
   create_order_response=$(curl --silent --request POST "$KRACKEND_URL/orders/add" \
     --header 'Content-Type: application/json' \
     --data "{
-      \"productIds\": [\"$product_id\"]
+      \"productIds\": [\"$product_id\"],
+      \"quantity\": $ORDER_QUANTITY
     }")
   order_id=$(echo $create_order_response | jq -r '._id')
   echo "Order created with ID: $order_id"
@@ -67,15 +67,20 @@ fetch_all_products
 create_order
 fetch_all_orders
 
+echo # Add a newline before the questions
+
 while true; do
   read -p "Do you want to create another order for the same product? (yes/no): " create_another_order
   if [ "$create_another_order" == "yes" ]; then
     create_order
     fetch_all_orders
+    echo # Add a newline before the next question
   else
     break
   fi
 done
+
+echo # Add a newline before the question
 
 read -p "Do you want to cancel the last order? (yes/no): " cancel_last_order
 if [ "$cancel_last_order" == "yes" ]; then
