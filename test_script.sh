@@ -4,6 +4,7 @@
 KRACKEND_URL="http://localhost:8000"
 
 # Product details
+ID_PRODUCT="product2"
 PRODUCT_NAME="Sample Product"
 PRODUCT_DESCRIPTION="Sample Description"
 PRODUCT_QUANTITY=10
@@ -17,11 +18,12 @@ create_product_response=$(curl --silent --request POST "$KRACKEND_URL/produits/a
   --header 'Content-Type: application/json' \
   --data "{
     \"name\": \"$PRODUCT_NAME\",
+    \"id\": \"$ID_PRODUCT\",
     \"description\": \"$PRODUCT_DESCRIPTION\",
     \"quantity\": $PRODUCT_QUANTITY,
     \"price\": $PRODUCT_PRICE
   }")
-product_id=$(echo $create_product_response | jq -r '._id')
+product_id=$(echo $create_product_response | jq -r '.id')
 echo "Product created with ID: $product_id"
 
 echo "Fetching all products..."
@@ -39,7 +41,7 @@ echo "Order created with ID: $order_id"
 echo "Fetching all orders..."
 curl --silent --location "$KRACKEND_URL/orders/getall"
 
-echo "Cancelling the order with ID $order_id..."
-curl --silent --request DELETE "$KRACKEND_URL/orders/$order_id"
+# echo "Cancelling the order with ID $order_id..."
+# curl --silent --request DELETE "$KRACKEND_URL/orders/$order_id"
 
 echo "Order cancelled successfully."

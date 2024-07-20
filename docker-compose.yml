@@ -53,7 +53,7 @@ services:
       PRODUCT_SERVICE_URL: http://spring-app:8080/produits
 
   krakend:
-    image: devopsfaith/krakend:latest
+    image: devopsfaith/krakend:2.1.0
     container_name: krakend
     ports:
       - "8000:8000"

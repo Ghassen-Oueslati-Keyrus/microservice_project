@@ -7,113 +7,117 @@
     {
       "endpoint": "/orders/getall",
       "method": "GET",
-      "output_encoding": "json",
+      "output_encoding": "no-op",
       "backend": [
         {
-          "host": ["http://node-app:9090"],
+          "host": ["http://order-service:9090"],
           "url_pattern": "/orders",
-          "encoding": "json"
+          "method": "GET",
+          "encoding": "no-op"
         }
       ]
     },
     {
       "endpoint": "/orders/get/{id}",
       "method": "GET",
-      "output_encoding": "json",
+      "output_encoding": "no-op",
       "backend": [
         {
-          "host": ["http://node-app:9090"],
+          "host": ["http://order-service:9090"],
           "url_pattern": "/orders/{id}",
-          "encoding": "json"
+          "method": "GET",
+          "encoding": "no-op"
         }
       ]
     },
     {
       "endpoint": "/orders/add",
       "method": "POST",
-      "output_encoding": "json",
+      "output_encoding": "no-op",
       "backend": [
         {
-          "host": ["http://node-app:9090"],
+          "host": ["http://order-service:9090"],
           "url_pattern": "/orders",
-          "encoding": "json"
+          "method": "POST",
+          "encoding": "no-op"
         }
       ]
     },
     {
       "endpoint": "/orders/{id}",
       "method": "DELETE",
-      "output_encoding": "json",
+      "output_encoding": "no-op",
       "backend": [
         {
-          "host": ["http://node-app:9090"],
+          "host": ["http://order-service:9090"],
           "url_pattern": "/orders/{id}",
-          "encoding": "json"
+          "method": "DELETE",
+          "encoding": "no-op"
         }
       ]
     },
     {
       "endpoint": "/produits/getall",
       "method": "GET",
-      "output_encoding": "json",
+      "output_encoding": "no-op",
       "backend": [
         {
           "host": ["http://spring-app:8080"],
           "url_pattern": "/produits",
-          "encoding": "json"
+          "method": "GET",
+          "encoding": "no-op"
         }
-      ],
-      "extra_config": {
-        "github.com/devopsfaith/krakend-metrics": {
-          "type": "none"
-        }
-      }
+      ]
     },
     {
       "endpoint": "/produits/add",
       "method": "POST",
-      "output_encoding": "json",
+      "output_encoding": "no-op",
       "backend": [
         {
           "host": ["http://spring-app:8080"],
           "url_pattern": "/produits",
-          "encoding": "json"
+          "method": "POST",
+          "encoding": "no-op"
         }
       ]
     },
     {
       "endpoint": "/produits/get/{id}",
       "method": "GET",
-      "output_encoding": "json",
+      "output_encoding": "no-op",
       "backend": [
         {
           "host": ["http://spring-app:8080"],
           "url_pattern": "/produits/{id}",
-          "encoding": "json"
+          "method": "GET",
+          "encoding": "no-op"
         }
       ]
     },
     {
       "endpoint": "/produits/update/{id}",
       "method": "PUT",
-      "output_encoding": "json",
+      "output_encoding": "no-op",
       "backend": [
         {
           "host": ["http://spring-app:8080"],
           "url_pattern": "/produits/{id}",
-          "encoding": "json"
+          "method": "PUT",
+          "encoding": "no-op"
         }
       ]
     },
     {
       "endpoint": "/produits/{id}",
       "method": "DELETE",
-      "output_encoding": "json",
+      "output_encoding": "no-op",
       "backend": [
         {
           "host": ["http://spring-app:8080"],
           "url_pattern": "/produits/{id}",
-          "encoding": "json"
+          "method": "DELETE",
+          "encoding": "no-op"
         }
       ]
     }
